@@ -5,11 +5,11 @@ output "all-availability-domains-in-your-tenancy" {
 
 #Db instance information
 output "public-ip-mjw-vm-db" {
-  value = oci_core_instance.mjw_vm_db.public_ip
+  value = oci_core_instance.mjw_vm_db[0].public_ip
 }
 
 output "private-ip-mjw-vm-db" {
-  value = oci_core_instance.mjw_vm_db.private_ip
+  value = oci_core_instance.mjw_vm_db[0].private_ip
 }
 
 output "instance_devices_mjw_vm_db" {
@@ -17,6 +17,6 @@ output "instance_devices_mjw_vm_db" {
 }
 
 output "boot_volume_id_mjw_vm_db" {
-  value = oci_core_instance.mjw_vm_db.boot_volume_id
+  value = oci_core_instance.mjw_vm_db[0].boot_volume_id
 }
 

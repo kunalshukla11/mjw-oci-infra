@@ -3,6 +3,11 @@ variable "region" {
   type        = string
   default     = "uk-london-1"
 }
+variable "availability_domain_number" {
+  description = "availability domain number"
+  type        = number
+  default     = 1
+}
 variable "profile" {
   description = "profile name"
   type        = string
@@ -12,12 +17,6 @@ variable "tags" {
   description = "Freeform tags."
   type        = map(any)
 }
-variable "compartment_name" {
-  description = "The name of the compartment."
-  type        = string
-  default     = "mjw_cmpt_dev"
-}
-
 variable "tenancy_ocid" {
   description = "The OCID of the tenancy."
   type        = string
@@ -43,11 +42,6 @@ variable "vm_db_ocpus" {
   default     = 1
   type        = number
 }
-variable "vm_image_ocid_ampere" {
-  description = "VM Image OCID"
-  type        = string
-}
-
 variable "vm_app_memory" {
   description = "VM APP Memory"
   default     = 18
@@ -60,7 +54,7 @@ variable "vm_app_ocpus" {
 }
 variable "db_volume_size" {
   description = "DB Volume Size"
-  default     = 40
+  default     = 50
   type        = number
 }
 variable "app_volume_size" {
@@ -91,7 +85,10 @@ variable "instances" {
   }
 }
 
-
+variable "budget_alert_message" {
+  type    = string
+  default = "Budget Alert"
+}
 
 
 
@@ -107,3 +104,40 @@ variable "instance_image_ocid" {
     uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaa4z7qr5ccidp4dowvqrb65v4qnrmzmx346q7gkvsbw6vfwxh6bkfq"
   }
 }
+
+
+# Resources toggle 
+variable "db_instance_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable DB Instance"
+}
+variable "app_instance_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable APP Instance"
+}
+variable "db_volume_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable DB Volume"
+}
+variable "app_volume_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable APP Volume"
+}
+
+
+# Secret values used for OCI services
+variable "postgres_password" {
+  type        = string
+  description = "Postgres Password"
+  sensitive   = true
+}
+variable "postgres_user" {
+  type        = string
+  description = "Postgres User"
+  sensitive   = true
+}
+

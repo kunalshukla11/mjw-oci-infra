@@ -1,0 +1,44 @@
+
+locals {
+  protocol_number = {
+    icmp   = 1
+    icmpv6 = 58
+    tcp    = 6
+    udp    = 17
+  }
+
+  instance = {
+    db_ubuntu = {
+      shape : "VM.Standard.A1.Flex",
+      operating_system : "Canonical Ubuntu",
+      user_data : {
+        write_files : [
+          {
+            path        = "/etc/postgres-volume-setup.sh"
+            content     = <<EOT
+#!/bin/bash
+mkfs.ext4 /dev/oracleoci/oraclevdb
+mkdir -p /mnt/postgres-data
+mount /dev/oracleoci/oraclevdb /mnt/postgres-data
+chown -R ubuntu:ubuntu /mnt/postgres-data
+echo "/dev/oracleoci/oraclevdb /mnt/postgres-data ext4 defaults 0 0" >> /etc/fstab
+EOT
+            permissions = "0755"
+          }
+        ]
+        runcmd : [
+          "apt-get remove --quiet --assume-yes --purge apparmor",
+          "bash /etc/postgres-volume-setup.sh",
+          "apt-get update -y && apt-get upgrade -y", # Update and upgrade Ubuntu
+          "apt-get install -y git",                  # Install Git
+          "apt-get install -y docker.io",            # Install Docker
+          "groupadd docker || true",                 # Add docker group
+          "usermod -aG docker ubuntu",               # Add ub ubuntu user  to docker group to run without sudo
+          "curl -L https://github.com/docker/compose/releases/download/v2.32.1/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose",
+          "chmod +x /usr/local/bin/docker-compose", # Install Docker Compose
+          "docker-compose version",
+        ],
+      },
+    },
+  }
+}

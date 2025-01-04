@@ -1,6 +1,8 @@
 
 resource "oci_core_instance" "mjw_vm_db" {
-  availability_domain                 = data.oci_identity_availability_domains.ads.availability_domains[0].name
+  # TODO --If toggle does not work then remove count and then refer instance with index
+  count                               = var.db_instance_enabled ? 1 : 0
+  availability_domain                 = data.oci_identity_availability_domains.ads.availability_domains[var.availability_domain_number].name
   compartment_id                      = var.compartment_ocid
   shape                               = "VM.Standard.A1.Flex"
   display_name                        = format("%sDbVm", replace(title(var.app_name), "/\\s/", ""))
@@ -17,10 +19,19 @@ resource "oci_core_instance" "mjw_vm_db" {
     ocpus         = var.vm_db_ocpus
   }
 
+
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
-    user_data           = base64encode(data.cloudinit_config.mjw_cloud_init["db_ubuntu"].rendered)
-  }
+    user_data = base64encode(join("\n", [
+      file("./compute-common.sh"),
+      "${templatefile("${path.module}/compute-db.sh", {
+        POSTGRES_PASSWORD = var.postgres_password
+      POSTGRES_USER = var.postgres_user })}"
+
+  ])) }
+
+
+
 
   source_details {
     source_id               = var.instance_image_ocid[var.region]
