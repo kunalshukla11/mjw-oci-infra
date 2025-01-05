@@ -1,5 +1,5 @@
 resource "oci_core_volume" "mjw_vm_db_core_volume" {
-  count                = var.db_volume_enabled ? 1 : 0
+  for_each             = var.db_volume_enabled ? { "db_volume" = "enabled" } : {}
   compartment_id       = var.compartment_ocid
   availability_domain  = data.oci_identity_availability_domains.ads.availability_domains[var.availability_domain_number].name
   display_name         = format("%sDbCoreVolume", replace(title(var.app_name), "/\\s/", ""))
@@ -20,8 +20,8 @@ resource "oci_core_volume" "mjw_vm_db_core_volume" {
 
 resource "oci_core_volume_attachment" "mjw_vm_db_volume_attachment" {
   attachment_type                     = "paravirtualized"
-  instance_id                         = oci_core_instance.mjw_vm_db[0].id
-  volume_id                           = oci_core_volume.mjw_vm_db_core_volume[0].id
+  instance_id                         = try(oci_core_instance.mjw_vm_db["db_instance"].id, null)
+  volume_id                           = try(oci_core_volume.mjw_vm_db_core_volume["db_volume"].id, null)
   device                              = "/dev/oracleoci/oraclevdb"
   display_name                        = format("%sDbCoreVolumeAttachment", replace(title(var.app_name), "/\\s/", ""))
   is_pv_encryption_in_transit_enabled = true

@@ -12,6 +12,7 @@ resource "oci_budget_budget" "mjw_budget" {
   targets = [
     var.compartment_ocid,
   ]
+
 }
 
 resource "oci_budget_alert_rule" "mjw_budget_alert_rule" {
@@ -23,5 +24,7 @@ resource "oci_budget_alert_rule" "mjw_budget_alert_rule" {
   threshold      = "50"
   threshold_type = "PERCENTAGE"
   type           = "ACTUAL"
+
+
 }
 

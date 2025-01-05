@@ -19,5 +19,5 @@ data "oci_core_boot_volumes" "mjw_boot_volumes" {
 #mjw db instances
 
 data "oci_core_instance_devices" "mjw_vm_db_devices" {
-  instance_id = oci_core_instance.mjw_vm_db[0].id
+  instance_id = try(oci_core_instance.mjw_vm_db["db_instance"].id, null)
 }
