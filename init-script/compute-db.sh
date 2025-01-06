@@ -17,6 +17,7 @@ else
 fi
 
 git clone https://github.com/kunalshukla11/mjw-service.git /home/ubuntu/mjw-service
+sudo chown -R ubuntu:ubuntu /home/ubuntu/mjw-service
 cp /home/ubuntu/.env /home/ubuntu/mjw-service/.env
 # Open port for postgres
 sudo firewall-cmd --zone=public --permanent --add-port=5432/tcp
