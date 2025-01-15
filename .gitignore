@@ -38,3 +38,8 @@ terraform.rc
 
 
 docker-compose.yml
+
+# Ignore backend config files
+*.config
+mjw_dev_backend.config
+
