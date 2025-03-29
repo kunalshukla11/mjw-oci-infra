@@ -80,6 +80,31 @@ resource "oci_core_security_list" "mjw_public_security_list" {
       max = 3000
     }
   }
+  ingress_security_rules {
+    stateless   = false
+    source      = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    protocol    = "6"
+    description = "HTTP traffic"
+
+    tcp_options {
+      min = 80
+      max = 80
+    }
+  }
+
+  ingress_security_rules {
+    stateless   = false
+    source      = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    protocol    = "6"
+    description = "HTTPS traffic"
+
+    tcp_options {
+      min = 443
+      max = 443
+    }
+  }
 
   ingress_security_rules {
     stateless   = false

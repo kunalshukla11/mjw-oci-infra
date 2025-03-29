@@ -23,7 +23,10 @@ resource "oci_core_instance" "mjw_vm_db" {
       file("./init-script/compute-common.sh"),
       "${templatefile("${path.module}/init-script/compute-env.sh", {
         POSTGRES_PASSWORD = var.postgres_password
-      POSTGRES_USER = var.postgres_user })}",
+        POSTGRES_USER     = var.postgres_user
+        MJW_SERVICE_URL   = var.mjw_service_url
+        MJW_DB_HOST       = var.mjw_db_host
+      })}",
 
       file("./init-script/compute-db.sh")
     ]))

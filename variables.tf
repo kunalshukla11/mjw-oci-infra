@@ -141,3 +141,14 @@ variable "postgres_user" {
   sensitive   = true
 }
 
+variable "mjw_service_url" {
+  type        = string
+  description = "MJW Service URL"
+  sensitive   = true
+}
+variable "mjw_db_host" {
+  type        = string
+  description = "MJW DB Host"
+  sensitive   = true
+
+}
